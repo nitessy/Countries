@@ -9,10 +9,10 @@ const icon = document.querySelector('.icon')
 const cloudOutput = document.querySelector('.cloud');
 const humdityOutput = document.querySelector('.humidity');
 const windOutput = document.querySelector('.wind');
-const form = document.querySelector('locationInput');
+const form = document.getElementById('locationInput');
 const search = document.querySelector('.search');
-const btn = document.querySelector('.btn');
-const cities = document.querySelector('.city');
+const btn = document.querySelector('.submit');
+const cities = document.querySelectorAll('.city');
 
 //defualt city when the page loads
 let cityInput="London";
@@ -37,10 +37,11 @@ cities.forEach((city) => {
     })
     //add submit event to the form
     form.addEventListener('submit', (e) => {
+
         if(search.Value.length == 0) {
             alert('Please type in a city name');
-        }else{
-            cityInput = search.ariaValueMax;
+        } else {
+            cityInput = search.value;
             fetchWeatherData();
             search.value = "";
             app.style.opacity ="0";
@@ -62,37 +63,36 @@ cities.forEach((city) => {
     };
 
     function fetchWeatherData() {
-        fetch(`http://api.weatherapi.com/
-        v1/current.json?key=7e6f8432fab1420ea1d173037232206=${cityInput}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
+        fetch(`http:/api.weatherapi.com/v1/current.json?key=7e6f8432fab1420ea1d173037232206=${cityInput}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
 
-            temp.innerHTML = data.current.temp_c + "&#176;";
-            conditionOutput.innerHTML = data.current.condition.text; 
+                temp.innerHTML = data.current.temp_c + "&#176;";
+                conditionOutput.innerHTML = data.current.condition.text; 
 
-            const date = data.location.localtime;
-            const y = parseInt(date.substr(0, 4));
-            const m = parseInt(date.substr(5, 2));
-            const d = parseInt(date.substr(8, 2));
-            const time = date.substr(11);
+                const date = data.location.localtime;
+                const y = parseInt(date.substr(0, 4));
+                const m = parseInt(date.substr(5, 2));
+                const d = parseInt(date.substr(8, 2));
+                const time = date.substr(11);
 
-            dateOutput.innerHTML = `${dayOfTheWeek(d, m, y)} ${d}, ${m} ${y}`;
-            timeOutput.innerHTML = data.location.name;
+                dateOutput.innerHTML = `${dayOfTheWeek(d, m, y)} ${d}, ${m} ${y}`;
+                timeOutput.innerHTML = time;
             
-            nameOutput.innerHTML = date.location.name;
+                nameOutput.innerHTML = date.location.name;
 
-            const iconId = data.current.condition.icon.substr(
+                const iconId = data.current.condition.icon.substr(
                 "//cdn.weatherapi.com/weather/64x64/".length);
 
-            icon.src = "./icons/" + iconId;
+                icon.src = "./icons/" + iconId;
 
-            cloudOutput.innerHTML = data.current.cloud + "%";
-            humdityOutput.innerHTML = data.current.humidity +
+                cloudOutput.innerHTML = data.current.cloud + "%";
+
 
             
 
-        })
+            })
     }
 
 

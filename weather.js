@@ -62,7 +62,37 @@ cities.forEach((city) => {
     };
 
     function fetchWeatherData() {
-        fetch(`http://api.weatherapi.com/`)
+        fetch(`http://api.weatherapi.com/
+        v1/current.json?key=7e6f8432fab1420ea1d173037232206=${cityInput}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+
+            temp.innerHTML = data.current.temp_c + "&#176;";
+            conditionOutput.innerHTML = data.current.condition.text; 
+
+            const date = data.location.localtime;
+            const y = parseInt(date.substr(0, 4));
+            const m = parseInt(date.substr(5, 2));
+            const d = parseInt(date.substr(8, 2));
+            const time = date.substr(11);
+
+            dateOutput.innerHTML = `${dayOfTheWeek(d, m, y)} ${d}, ${m} ${y}`;
+            timeOutput.innerHTML = data.location.name;
+            
+            nameOutput.innerHTML = date.location.name;
+
+            const iconId = data.current.condition.icon.substr(
+                "//cdn.weatherapi.com/weather/64x64/".length);
+
+            icon.src = "./icons/" + iconId;
+
+            cloudOutput.innerHTML = data.current.cloud + "%";
+            humdityOutput.innerHTML = data.current.humidity +
+
+            
+
+        })
     }
 
 
